@@ -212,7 +212,7 @@ def WeatherData(states_cities):
                     'Datetime':generate_random_date(monsoon_start_date, monsoon_end_date),
                     'Temperature':monsoon_temperature,
                     'DewPoint':random.randint(monsoon_temperature - 5, monsoon_temperature),
-                    'Humidity':random.randint(90.100),
+                    'Humidity':random.randint(90,100),
                     'WindSpeed':random.randint(2,10),
                     'WindDirection':random.choice(wind_direction),
                     'Precipitation':random.choice(monsoon_precipitation),
@@ -1823,7 +1823,7 @@ def WeatherData(states_cities):
             monsoon_temperature = random.randint(25,35)
 
             # Uttar Pradesh all 3 seasons data dictionary
-            Uttar Pradesh = {
+            UttarPradesh = {
                 'Winter': {
                     'Datetime':generate_random_date(winter_start_date, winter_end_date),
                     'Temperature':winter_temperature,
@@ -1961,7 +1961,7 @@ def WeatherData(states_cities):
             monsoon_temperature = random.randint(25,35)
 
             # West Bengal all 3 seasons data dictionary
-            West Bengal = {
+            WestBengal = {
                 'Winter': {
                     'Datetime':generate_random_date(winter_start_date, winter_end_date),
                     'Temperature':winter_temperature,
@@ -2510,7 +2510,7 @@ def WeatherData(states_cities):
         
     
     # Display City Data
-    print(AndhraPradesh)
+    print(Gujarat)
 
 # Calling WeatherData Function
 WeatherData(states_cities)
