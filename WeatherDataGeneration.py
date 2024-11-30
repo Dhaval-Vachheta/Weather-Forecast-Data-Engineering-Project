@@ -1,8 +1,10 @@
 ##################################################################
 # Libraries
 ##################################################################
-import random
+import os
 import json
+import time
+import random
 from datetime import datetime, timedelta
 
 ##################################################################
@@ -73,6 +75,43 @@ monsoon_end_date = "31-10-2024"
 # Weather Data Creation Function
 ##################################################################
 def WeatherData(states_cities):
+    # State Data Dictionary Declaration
+    AndhraPradesh = {},
+    ArunachalPradesh = {},
+    Assam = {},
+    Bihar = {},
+    Chhattisgarh = {},
+    Goa = {},
+    Gujarat = {},
+    Haryana = {},
+    HimachalPradesh = {},
+    Jharkhand = {},
+    Karnataka = {},
+    Kerala = {},
+    MadhyaPradesh = {},
+    Maharashtra = {},
+    Manipur = {},
+    Meghalaya = {},
+    Mizoram = {},
+    Nagaland = {},
+    Odisha = {},
+    Punjab = {},
+    Rajasthan = {},
+    Sikkim = {},
+    TamilNadu = {},
+    Telangana = {},
+    Tripura = {},
+    UttarPradesh = {},
+    Uttarakhand = {},
+    WestBengal = {},
+    AndamanNicobar = {},
+    DadraNagarHaveli_DamanDiu = {},
+    Delhi = {},
+    JammuKashmir = {},
+    Ladakh = {},
+    Lakshadweep = {},
+    Puducherry = {}
+
     # Wind Direction
     wind_direction = ['N','E','S','W','NE','NW','SE','SW']
 
@@ -2030,7 +2069,7 @@ def WeatherData(states_cities):
             monsoon_temperature = random.randint(25,35)
 
             # Andaman and Nicobar Islands all 3 seasons data dictionary
-            Kerala = {
+            AndamanNicobar = {
                 'Winter': {
                     'Datetime':generate_random_date(winter_start_date, winter_end_date),
                     'Temperature':winter_temperature,
@@ -2507,10 +2546,98 @@ def WeatherData(states_cities):
                 }
             }
         
-        
-    
     # Display City Data
-    print(Gujarat)
+    # print(Gujarat)
+
+    # Return all states & capitals dataset
+    return {
+        "Andhra Pradesh":AndhraPradesh,
+        "Arunachal Pradesh":ArunachalPradesh,
+        "Assam":Assam,
+        "Bihar":Bihar,
+        "Goa":Goa,
+        "Gujarat":Gujarat   ,
+        "Haryana":Haryana,
+        "Himachal Pradesh":HimachalPradesh,
+        "Jharkhand":Jharkhand,
+        "Karnataka":Karnataka,
+        "Kerala":Kerala,
+        "Madhya Pradesh":MadhyaPradesh,
+        "Maharashtra":Maharashtra,
+        "Manipur":Manipur,
+        "Meghalaya":Meghalaya,
+        "Mizoram":Mizoram   ,
+        "Nagaland":Nagaland,
+        "Odisha":Odisha,
+        "Punjab":Punjab,
+        "Rajasthan":Rajasthan,
+        "Sikkim":Sikkim,
+        "Tamil Nadu":TamilNadu,
+        "Tripura":Tripura,
+        "Uttar Pradesh":UttarPradesh,
+        "Uttarakhand":Uttarakhand,
+        "West Bengal":WestBengal,
+        "Andaman and Nicobar Islands":AndamanNicobar,
+        "Dadra and Nagar Haveli and Daman and Diu":DadraNagarHaveli_DamanDiu,
+        "Delhi (National Capital Territory)":Delhi,
+        "Jammu and Kashmir":JammuKashmir,
+        "Ladakh":Ladakh,
+        "Lakshadweep":Lakshadweep,
+        "Puducherry":Puducherry
+    }
 
 # Calling WeatherData Function
-WeatherData(states_cities)
+# WeatherData(states_cities)
+# print(states_cities.keys())
+
+##################################################################
+# Preparing the dataset
+##################################################################
+# Empty List
+# weatherDataset = []
+
+# # Generate weather data for each state/capital
+# for state in states_cities:
+#     state_data = WeatherData(state)
+#     print(state_data)
+    # weatherDataset.append(state_data)
+
+#################################################################
+# Json File Generation
+#################################################################
+def JsonFile(states_cities):
+    # Display weatherDataset
+    dataset = WeatherData(states_cities)
+    # print(ans)
+
+    # Current DateTime
+    current_time = datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+
+    # Json Path Output
+    output_path = f'D:\Dhavali\Projects\Weather Forecast Data Engineer Project\Dataset'
+    output_file = os.path.join(output_path, f'WeatherData_{current_time}.json')
+
+    # Exporting dataset as json
+    with open(output_file, 'w') as json_file:
+        json.dump(dataset, json_file, indent=4)
+
+    # Display Data
+    print(f"Weather dataset has been generated at location: {output_file}!")
+
+# Calling JsonFile Function
+# JsonFile(states_cities)
+
+#################################################################
+# Json File Generation (Every 2 minutes)
+#################################################################
+def GenerateFile_EveryTwoMinutes(states_cities):
+    while True:
+        # Calling Json File Function
+        JsonFile(states_cities)
+        print("\n\nFile generated!\n\nWaiting for completed 2 minues.....")
+
+        # Waiting for 2 minutes
+        time.sleep(120)
+
+# GenerateFile_EveryTwoMinutes Function
+GenerateFile_EveryTwoMinutes(states_cities)
