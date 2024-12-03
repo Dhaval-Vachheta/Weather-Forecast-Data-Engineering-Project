@@ -1,39 +1,46 @@
 ##################################################################
 # Libraries
 ##################################################################
-import pandas as pd
+import os
 import json
-import time
 
 ##################################################################
 # Load JSON data from a file
 ##################################################################
-json_path = "D:\Dhavali\Projects\Weather Forecast Data Engineer Project\Dataset"
-with open(json_path+"\WeatherData_2024-11-30_23_15_49.json","r") as file:
-    data = json.load(file)
+json_path = r"D:\Dhavali\Projects\Weather Forecast Data Engineer Project\Dataset"
 
-# Display JSON Data
-# print(data)
+jsonFiles = os.listdir(json_path)
 
-##################################################################
-# Convert the JSON data to a pandas dataframe
-##################################################################
-df = pd.DataFrame.from_dict(data, orient='index')
-
-# Display Data
-# print(df)
+# List of all file names
+filtered_files = [f for f in jsonFiles if f.startswith("WeatherData_2024") and f.endswith(".json")]
 
 ##################################################################
-# Function for displaying the state wise data
+# Function to display row-wise data for each state
 ##################################################################
-def state_wise_data_generation(df):
-    for index, row in df.iterrows():
-        print(f"State: {index}")
-        print(f"    Winter: {row['Winter']}")
-        print(f"    Summer: {row['Summer']}")
-        print(f"    Monsoon: {row['Monsoon']}")
-        print("-" * 20)
-        time.sleep(1) # Pause for a second to show 1 by 1 data
+def display_state_data(data):
+    if isinstance(data, dict):
+        for state, seasons in data.items():
+            print(f"\nState: {state}")
+            if isinstance(seasons, dict):
+                for season, details in seasons.items():
+                    print(f"  Season: {season}")
+                    if isinstance(details, dict):
+                        for key, value in details.items():
+                            print(f"    {key}: {value}")
+                    else:
+                        print(f"    {details}")
+            else:
+                print(f"  {seasons}")
+                
+##################################################################
+# Process each file
+##################################################################
+for file in filtered_files:
+    full_path = os.path.join(json_path, file)  # Concatenate path and file name
+    print(f"\nReading file: {file}")
 
-# Calling state_wise_data_generation Function
-state_wise_data_generation(df)
+    with open(full_path, "r") as f:  # Use full_path to open the file
+        data = json.load(f)
+
+    # Display row-wise data for each state
+    display_state_data(data)
