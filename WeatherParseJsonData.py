@@ -5,42 +5,58 @@ import os
 import json
 
 ##################################################################
-# Load JSON data from a file
+# Json Data Reading
 ##################################################################
+# Path to the folder containing JSON files
 json_path = r"D:\Dhavali\Projects\Weather Forecast Data Engineer Project\Dataset"
 
-jsonFiles = os.listdir(json_path)
+# Get the list of json files
+json_files = os.listdir(json_path)
 
-# List of all file names
-filtered_files = [f for f in jsonFiles if f.startswith("WeatherData_2024") and f.endswith(".json")]
+# Empty list for files name
+files = [file for file in json_files]
+
+# List to store all records row-wise
+all_records = []
+
+# Full path of json files
+for file in files:
+    full_path = os.path.join(json_path, file)
+    print(f"Processing file: {full_path}")
+
+    # Read the JSON file
+    with open(full_path, 'r') as f:
+        weather_data = json.load(f)
+
+    ##################################################################
+    # Getting row-wise (1 by 1) record of JSON file
+    ##################################################################
+    def json_row_wise_data(weatherData, fileName):
+        row_records = []  # List to store records
+        if isinstance(weatherData, dict):
+            for state, seasons in weatherData.items():
+                if isinstance(seasons, dict):
+                    for season, details in seasons.items():
+                        if isinstance(details, dict):
+                            # Create a dictionary for each row
+                            record = {
+                                'FileName': fileName,
+                                'State': state,
+                                'Season': season,
+                                **details  # Unpack the details dictionary
+                            }
+                            row_records.append(record)
+                        else:
+                            print(f"Unexpected format in state: {state}, season: {season}")
+        
+        return row_records
+
+    # Append the records of this file to the main list
+    all_records.extend(json_row_wise_data(weather_data, file))
 
 ##################################################################
-# Function to display row-wise data for each state
+# Final result of row wise data
 ##################################################################
-def display_state_data(data):
-    if isinstance(data, dict):
-        for state, seasons in data.items():
-            print(f"\nState: {state}")
-            if isinstance(seasons, dict):
-                for season, details in seasons.items():
-                    print(f"  Season: {season}")
-                    if isinstance(details, dict):
-                        for key, value in details.items():
-                            print(f"    {key}: {value}")
-                    else:
-                        print(f"    {details}")
-            else:
-                print(f"  {seasons}")
-                
-##################################################################
-# Process each file
-##################################################################
-for file in filtered_files:
-    full_path = os.path.join(json_path, file)  # Concatenate path and file name
-    print(f"\nReading file: {file}")
-
-    with open(full_path, "r") as f:  # Use full_path to open the file
-        data = json.load(f)
-
-    # Display row-wise data for each state
-    display_state_data(data)
+# Display all records
+for record in all_records:
+    print(record)
